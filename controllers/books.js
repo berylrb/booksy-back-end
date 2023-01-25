@@ -20,6 +20,7 @@ function bsIndex(req, res) {
 }
 
 function show (req, res) {
+  console.log(req.params)
   axios.get(`https://api.nytimes.com/svc/books/v3/reviews.json?isbn=9780385547345&api-key=${process.env.API_KEY}`)
   .then(response => {
     Book.findOne({ isbn: response.results[0].isbn13[0] })
