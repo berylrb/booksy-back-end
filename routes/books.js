@@ -9,6 +9,7 @@ router.get('/', booksCtrl.bsIndex)
 
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
+router.get('/:id', checkAuth, booksCtrl.show)
 
 
 
