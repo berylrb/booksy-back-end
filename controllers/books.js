@@ -19,13 +19,22 @@ function bsIndex(req, res) {
   })
 }
 
-// function showBook(req, res) {
-//   axios.get (`https://api.nytimes.com/svc/books/v3/reviews.json?api-key=${process.env.API_KEY}`)
-// }
+function show (req, res) {
+  axios.get(`https://api.nytimes.com/svc/books/v3/reviews.json?isbn=9780385547345&api-key=${process.env.API_KEY}`)
+  .then(response => {
+    Book.findOne({ isbn: response.results[0].isbn13[0] })
+    res.json(response.results[0])
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({ err: err.errmsg })
+  })
+}
 
 
 
 export {
   bsIndex,
+  show
 }
 
