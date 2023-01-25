@@ -4,7 +4,10 @@ const Schema = mongoose.Schema
 
 const profileSchema = new Schema({
   name: String,
-  photo: String
+  photo: String,
+  bio: String,
+  savedBooks: [{ type: Schema.Types.ObjectId, ref: "Book" }],
+  joinedGroups: [{ type: Schema.Types.ObjectId, ref: "Group" }]
 },{
   timestamps: true,
 })
