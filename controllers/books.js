@@ -32,12 +32,23 @@ function show (req, res) {
   })
 }
 
+async function findReviewsByKey(req, res) {
+  try {
+    const book = await Book.findOne({ qKey: req.params.qKey })
+    res.json(book)
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({err: err.errmsg})
+  }
+}
+
 // book ratings = http://openlibrary.org/works/OL28914133W/ratings.json
 
 
 
 export {
   bsIndex,
-  show
+  show,
+  findReviewsByKey
 }
 
