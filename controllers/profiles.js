@@ -1,5 +1,6 @@
 import { Profile } from '../models/profile.js'
 import { v2 as cloudinary } from 'cloudinary'
+import { Book } from '../models/book.js'
 
 function index(req, res) {
   Profile.find({})
@@ -29,4 +30,26 @@ function addPhoto(req, res) {
   })
 }
 
-export { index, addPhoto }
+async function addBook(req, res) {
+  try {
+
+    req.body.description = req.body.description.value
+    req.body.author = req.body.authors[0].author
+    console.log('req.body.author', req.body.author)
+
+    const profile = await Profile.findById(req.params.id)
+    const book = await Book.create(req.body)
+    profile.savedBooks.push(book)
+    await profile.save()
+    res.json(book)
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({err: err.errmsg})
+  }
+}
+
+export { 
+  index, 
+  addPhoto,
+  addBook
+}

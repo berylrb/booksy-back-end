@@ -20,7 +20,7 @@ function show (req, res) {
   const { qKey } = req.params
   console.log(qKey)
   // axios.get(`https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${isbn}&api-key=${process.env.API_KEY}`)
-  axios.get(`http://openlibrary.org/works/${qKey}/editions.json`)
+  axios.get(`http://openlibrary.org/works/${qKey}.json`)
   .then(response => {
     console.log('HERE', response.data)
     // Book.findOne({ isbn: response.results.isbn13 })
