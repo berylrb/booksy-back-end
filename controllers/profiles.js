@@ -32,6 +32,11 @@ function addPhoto(req, res) {
 
 async function addBook(req, res) {
   try {
+
+    req.body.description = req.body.description.value
+    req.body.author = req.body.authors[0].author
+    console.log('req.body.author', req.body.author)
+
     const profile = await Profile.findById(req.params.id)
     const book = await Book.create(req.body)
     profile.savedBooks.push(book)
