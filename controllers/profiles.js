@@ -2,35 +2,43 @@ import { Profile } from '../models/profile.js'
 import { v2 as cloudinary } from 'cloudinary'
 import { Book } from '../models/book.js'
 
-function index(req, res) {
-  Profile.find({})
-  .then(profiles => res.json(profiles))
-  .catch(err => {
+
+const index = async (req, res) => {
+  try {
+    const profiles = await Profile.find({})
+    res.json(profiles)
+  } catch (err) {
     console.log(err)
     res.status(500).json(err)
-  })
+  }
 }
 
-function addPhoto(req, res) {
-  const imageFile = req.files.photo.path
-  Profile.findById(req.params.id)
-  .then(profile => {
-    cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
-    .then(image => {
+const show = async (req, res) => {
+  try {
+    const profile = await Profile.findById(req.params.id)
+      .populate('savedBooks')
+    res.status(200).json(profile)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+const addPhoto = async (req, res) => {
+  try {
+    const imageFile = req.files.photo.path
+    const profile = Profile.findById(req.params.id)
+    const image =  await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` })
       profile.photo = image.url
       profile.save()
-      .then(profile => {
-        res.status(201).json(profile.photo)
-      })
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
-  })
+    res.status(201).json(profile.photo)
+  } catch(err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
 }
 
-async function addBook(req, res) {
+const addBook = async (req, res) => {
   try {
 
     req.body.description = req.body.description.value
@@ -42,14 +50,15 @@ async function addBook(req, res) {
     profile.savedBooks.push(book)
     await profile.save()
     res.json(book)
-  } catch(err) {
+  } catch (err) {
     console.log(err)
-    res.status(500).json({err: err.errmsg})
+    res.status(500).json({ err: err.errmsg })
   }
 }
 
-export { 
-  index, 
+export {
+  index,
   addPhoto,
-  addBook
+  addBook,
+  show
 }
