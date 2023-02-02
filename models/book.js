@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const reviewSchema = new Schema({
-  reviewAuthor: { type: Schema.Types.ObjectId, ref: "Profile" },
+  reviewAuthor: { type: String },
   reviewContent: { type: String, required: true },
   // book: { type: Schema.Types.ObjectId, ref: "Book" }
 })
