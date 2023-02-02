@@ -32,29 +32,49 @@ function show (req, res) {
   })
 }
 
-async function createReview(req, res) {
-  try {
-    console.log(req.params, 'params')
-    const book = await Book.findById(rew.params.bookId)
-    book.reviews.push(req.body)
-    await book.save()
-    const newReview = book.reviews[book.reviews.length - 1]
-    const profile = await Profile.findById(req.user.profile)
-    newReview.reviewAuthor = profile
-    res.status(201).json(newReview)
-  } catch (error) {
-    console.log(error)
-    res.status(500).json(error)
-  }
+// async function createReview(req, res) {
+//   try {
+//     console.log(req.params, 'params')
+//     const book = await Book.findById(req.params.bookId)
+//     console.log(book, 'book')
+//     const profile = await Profile.findById(req.user.profile)
+//     req.body.reviewAuthor = profile.name
+//     const updatedBook = book.reviews?.push(req.body)
+//     // const newReview = book.reviews[book.reviews?.length - 1]
+//     await updatedBook.save()
+//     console.log(updatedBook, 'updated')
+//     res.status(201).json(updatedBook)
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json(error)
+//   }
+// }
+
+function createReview(req, res) {
+  Book.findById(req.params.bookId.trim())
+  .then(book => {
+    Profile.findById(req.user.profile)
+    .then(profile => {
+      req.body.reviewAuthor = profile
+      book.reviews.push(req.body)
+      book.save()
+      .then(updatedBook => res.json(updatedBook))
+    })
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json(err)
+  })
 }
 
 async function findReviewsByKey(req, res) {
   try {
-    const book = await Book.findOne({ qKey: req.params.qKey })
+    const book = await Book.findOne({ qKey: req.params.id })
+    console.log(book, 'book')
     res.json(book)
   } catch(err) {
     console.log(err)
-    res.status(500).json({err: err.errmsg})
+    res.status(500).json(err)
   }
 }
 

@@ -11,7 +11,7 @@ router.get('/', booksCtrl.bsIndex)
 router.use(decodeUserFromToken)
 router.get('/:qKey', checkAuth, booksCtrl.show)
 router.get('/:qKey/ratings', checkAuth, booksCtrl.getBookRatings)
-router.post('/:qKey/reviews', checkAuth, booksCtrl.createReview)
+router.post('/:bookId/reviews', checkAuth, booksCtrl.createReview)
 router.get('/:qKey/reviews', checkAuth, booksCtrl.findReviewsByKey)
 
 
