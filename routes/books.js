@@ -10,6 +10,9 @@ router.get('/', booksCtrl.bsIndex)
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 router.get('/:qKey', checkAuth, booksCtrl.show)
+router.get('/:qKey/ratings', checkAuth, booksCtrl.getBookRatings)
+
+router.get('/:qKey/reviews', checkAuth, booksCtrl.findReviewsByKey)
 
 
 
