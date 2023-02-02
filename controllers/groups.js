@@ -13,6 +13,7 @@ const createGroup = async (req, res) => {
       { new: true }
       )
       group.owner = profile
+      group.members.push(profile)
       res.status(201).json(group)
   } catch (error) {
     console.log(error)
