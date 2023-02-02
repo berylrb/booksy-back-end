@@ -55,8 +55,8 @@ function createReview(req, res) {
   .then(book => {
     Profile.findById(req.user.profile)
     .then(profile => {
-      req.body.reviewAuthor = profile
-      book.reviews.push(req.body)
+      req.body.reviewAuthor = profile.name
+      book.reviews?.push(req.body)
       book.save()
       .then(updatedBook => res.json(updatedBook))
     })
