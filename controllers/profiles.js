@@ -24,20 +24,24 @@ const show = async (req, res) => {
   }
 }
 
-const addPhoto = async (req, res) => {
-  try {
-    const imageFile = req.files.photo.path
-    const profile = Profile.findById(req.params.id)
-    const image =  await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` })
+function addPhoto(req, res) {
+  const imageFile = req.files.photo.path
+  Profile.findById(req.params.id)
+  .then(profile => {
+    cloudinary.uploader.upload(imageFile, {tags: `${profile.email}`})
+    .then(image => {
       profile.photo = image.url
       profile.save()
-    res.status(201).json(profile.photo)
-  } catch(err) {
-    console.log(err)
-    res.status(500).json(err)
-  }
+      .then(profile => {
+        res.status(201).json(profile.photo)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  })
 }
-
 const addBook = async (req, res) => {
   try {
 
