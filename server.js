@@ -12,6 +12,7 @@ import './config/database.js'
 import { router as profilesRouter } from './routes/profiles.js'
 import { router as authRouter } from './routes/auth.js'
 import { router as booksRouter } from './routes/books.js'
+import { router as groupsRouter } from './routes/groups.js'
 
 // create the express app
 const app = express()

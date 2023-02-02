@@ -13,6 +13,7 @@ const groupSchema = new Schema(
       required: true
     },
     imgUrl: { type: String },
+    owner: { type: Schema.Types.ObjectId, ref: "Profile"},
     members: [{ type: Schema.Types.ObjectId, ref: "Profile" }],
     booksRead: [{ type: Schema.Types.ObjectId, ref: "Book" }],
   },
