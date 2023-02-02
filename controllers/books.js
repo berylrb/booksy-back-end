@@ -32,6 +32,22 @@ function show (req, res) {
   })
 }
 
+async function createReview(req, res) {
+  try {
+    console.log(req.params, 'params')
+    const book = await Book.findById(rew.params.bookId)
+    book.reviews.push(req.body)
+    await book.save()
+    const newReview = book.reviews[book.reviews.length - 1]
+    const profile = await Profile.findById(req.user.profile)
+    newReview.reviewAuthor = profile
+    res.status(201).json(newReview)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 async function findReviewsByKey(req, res) {
   try {
     const book = await Book.findOne({ qKey: req.params.qKey })
@@ -60,6 +76,7 @@ async function getBookRatings(req, res) {
 export {
   bsIndex,
   show,
+  createReview,
   findReviewsByKey,
   getBookRatings
 }
