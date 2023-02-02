@@ -42,6 +42,7 @@ function addPhoto(req, res) {
     })
   })
 }
+
 const addBook = async (req, res) => {
   try {
 
