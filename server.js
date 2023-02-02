@@ -26,6 +26,7 @@ app.use(formData.parse())
 app.use('/api/profiles', profilesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/books', booksRouter)
+app.use('/api/groups', groupsRouter)
 
 // handle 404 errors
 app.use(function (req, res, next) {
