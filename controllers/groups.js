@@ -99,7 +99,7 @@ function addPhoto(req, res) {
 export {
   addPhoto,
   createGroup,
-  index,
+  
   show,
   update,
   deleteGroup as delete,
