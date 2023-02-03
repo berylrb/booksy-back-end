@@ -49,6 +49,18 @@ const show = async (req, res) => {
   }
 }
 
+const update = async (req, res) => {
+  try {
+    const group = await Group.findByIdAndUpdate(
+      req.params.groupId,
+      req.body,
+      { new: true }
+    ).populate('owner')
+    res.status(200).json(group)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 function addPhoto(req, res) {
   const imageFile = req.files.photo.path
@@ -73,5 +85,6 @@ export {
   addPhoto,
   createGroup,
   index,
-  show
+  show,
+  update
 }
