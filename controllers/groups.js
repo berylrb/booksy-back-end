@@ -38,7 +38,7 @@ const createGroup = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const group = await Group.findById(req.params.id)
+    const group = await Group.findById(req.params.groupId)
       .populate('owner')
       .populate('members')
       .populate('booksRead')
