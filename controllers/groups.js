@@ -36,7 +36,18 @@ const createGroup = async (req, res) => {
   }
 }
 
-
+const show = async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.id)
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+      res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
 
 
 function addPhoto(req, res) {
@@ -61,5 +72,6 @@ function addPhoto(req, res) {
 export {
   addPhoto,
   createGroup,
-  index
+  index,
+  show
 }
