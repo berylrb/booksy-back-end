@@ -62,11 +62,13 @@ const update = async (req, res) => {
   }
 }
 
+
 const deleteGroup = async(req, res) => {
   try {
     const group = Group.findByIdAndDelete(req.params.groupId)
     const profile = Profile.findById(req.user.profile)
     profile.joinedGroups.remove({ _id: req.params.groupId })
+    group.members.remove( { _id: profile })
     await profile.save()
     res.status(200).json(group)
   } catch (error) {
@@ -101,5 +103,5 @@ export {
   show,
   update,
   deleteGroup as delete,
-  
+
 }
