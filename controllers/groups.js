@@ -62,6 +62,19 @@ const update = async (req, res) => {
   }
 }
 
+const deleteGroup = async(req, res) => {
+  try {
+    const group = Group.findByIdAndDelete(req.params.groupId)
+    const profile = Profile.findById(req.user.profile)
+    profile.joinedGroups.remove({ _id: req.params.groupId })
+    await profile.save()
+    res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 function addPhoto(req, res) {
   const imageFile = req.files.photo.path
   Group.findById(req.params.id)
@@ -86,5 +99,7 @@ export {
   createGroup,
   index,
   show,
-  update
+  update,
+  deleteGroup as delete,
+  
 }
