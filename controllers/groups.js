@@ -81,6 +81,7 @@ function addPhoto(req, res) {
   const imageFile = req.files.photo.path
   Group.findById(req.params.id)
   .then(group => {
+    console.log('beef')
     cloudinary.uploader.upload(imageFile, {tags: `${group.name}`})
     .then(image => {
       group.imgUrl = image.url
@@ -99,11 +100,9 @@ function addPhoto(req, res) {
 export {
   addPhoto,
   createGroup,
-  
+  index,
   show,
   update,
   deleteGroup as delete,
 
 }
-
-//stupid rules
