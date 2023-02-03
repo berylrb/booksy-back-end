@@ -11,6 +11,7 @@ const router = Router()
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, groupsCtrl.createGroup)
 router.get('/', checkAuth, groupsCtrl.index)
+router.get('/:groupId', checkAuth, groupsCtrl.show)
 router.put('/:groupId/add-photo', checkAuth, groupsCtrl.addPhoto)
 
 export { router }

@@ -37,6 +37,8 @@ const createGroup = async (req, res) => {
 }
 
 
+
+
 function addPhoto(req, res) {
   const imageFile = req.files.photo.path
   Group.findById(req.params.id)
