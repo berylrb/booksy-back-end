@@ -4,6 +4,20 @@ import { Book } from '../models/book.js'
 import { Group } from '../models/group.js'
 
 
+const index = async (req, res) => {
+  try {
+    const groups = await Group.find({})
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+      .sort({ createdAt: 'desc' })
+      res.status(200).json(groups)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 const createGroup = async (req, res) => {
   try {
     req.body.owner = req.user.profile
@@ -14,6 +28,7 @@ const createGroup = async (req, res) => {
       )
       group.owner = profile
       group.members.push(profile)
+      group.save()
       res.status(201).json(group)
   } catch (error) {
     console.log(error)
@@ -43,5 +58,6 @@ function addPhoto(req, res) {
 
 export {
   addPhoto,
-  createGroup
+  createGroup,
+  index
 }

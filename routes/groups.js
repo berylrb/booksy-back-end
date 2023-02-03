@@ -10,6 +10,7 @@ const router = Router()
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, groupsCtrl.createGroup)
+router.get('/', checkAuth, groupsCtrl.index)
 router.put('/:groupId/add-photo', checkAuth, groupsCtrl.addPhoto)
 
 export { router }
