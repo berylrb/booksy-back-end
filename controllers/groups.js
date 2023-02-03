@@ -4,6 +4,20 @@ import { Book } from '../models/book.js'
 import { Group } from '../models/group.js'
 
 
+const index = async (req, res) => {
+  try {
+    const groups = await Group.find({})
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+      .sort({ createdAt: 'desc' })
+      res.status(200).json(groups)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 const createGroup = async (req, res) => {
   try {
     req.body.owner = req.user.profile
@@ -13,6 +27,8 @@ const createGroup = async (req, res) => {
       { new: true }
       )
       group.owner = profile
+      group.members.push(profile)
+      group.save()
       res.status(201).json(group)
   } catch (error) {
     console.log(error)
@@ -20,6 +36,46 @@ const createGroup = async (req, res) => {
   }
 }
 
+const show = async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.groupId)
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+      res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
+const update = async (req, res) => {
+  try {
+    const group = await Group.findByIdAndUpdate(
+      req.params.groupId,
+      req.body,
+      { new: true }
+    ).populate('owner')
+    res.status(200).json(group)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+
+const deleteGroup = async(req, res) => {
+  try {
+    const group = Group.findByIdAndDelete(req.params.groupId)
+    const profile = Profile.findById(req.user.profile)
+    profile.joinedGroups.remove({ _id: req.params.groupId })
+    group.members.remove( { _id: profile })
+    await profile.save()
+    res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
 
 function addPhoto(req, res) {
   const imageFile = req.files.photo.path
@@ -42,5 +98,10 @@ function addPhoto(req, res) {
 
 export {
   addPhoto,
-  createGroup
+  createGroup,
+  index,
+  show,
+  update,
+  deleteGroup as delete,
+
 }
