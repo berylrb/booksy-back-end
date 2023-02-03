@@ -42,7 +42,6 @@ const show = async (req, res) => {
       .populate('owner')
       .populate('members')
       .populate('booksRead')
-      console.log(group, 'group check')
       res.status(200).json(group)
   } catch (error) {
     console.log(error)
@@ -68,7 +67,6 @@ const deleteGroup = async(req, res) => {
   try {
     const group = await Group.findByIdAndDelete(req.params.groupId)
     const profile = await Profile.findById(req.user.profile)
-    console.log(profile, 'profile check')
     profile.joinedGroups?.remove({ _id: req.params.groupId })
     await profile.save()
     res.status(200).json(group)
