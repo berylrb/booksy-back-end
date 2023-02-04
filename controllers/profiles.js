@@ -52,6 +52,8 @@ const addBook = async (req, res) => {
 
     const profile = await Profile.findById(req.params.id)
     const book = await Book.create(req.body)
+    book.collectedByPerson?.push(profile)
+    await book.save()
     profile.savedBooks.push(book)
     await profile.save()
     res.json(book)

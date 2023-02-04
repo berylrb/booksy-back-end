@@ -16,20 +16,24 @@ function bsIndex(req, res) {
 }
 
 
-function show (req, res) {
-  const { qKey } = req.params
-  console.log(qKey)
-  // axios.get(`https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${isbn}&api-key=${process.env.API_KEY}`)
-  axios.get(`http://openlibrary.org/works/${qKey}.json`)
-  .then(response => {
-    console.log('HERE', response.data)
-    // Book.findOne({ isbn: response.results.isbn13 })
-    res.json(response.data)
-  })
-  .catch(err => {
-    console.log(err)
-    res.status(500).json({ err: err.errmsg })
-  })
+async function show(req, res) {
+  try {
+    const { qKey } = req.params
+    console.log('qKey:', qKey)
+
+    const response = await axios.get(`http://openlibrary.org/works/${qKey}.json`)
+    console.log('OL API Res:', response)
+
+    const bookData = await Book.findOne({ qKey: qKey }).lean()
+    console.log('Existing Book Doc:', bookData)
+
+    const book = bookData ? { ...response.data, ...bookData } : response.data
+    console.log('Consolidated Book', book)
+
+    res.json(book)
+  } catch (err) {
+    res.status(500).json(err)
+  }
 }
 
 // async function createReview(req, res) {
