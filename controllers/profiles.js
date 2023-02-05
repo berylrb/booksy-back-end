@@ -46,7 +46,7 @@ function addPhoto(req, res) {
 const addBook = async (req, res) => {
   try {
 
-    req.body.description = req.body.description.value
+    // req.body.description = req.body.description.value
     // req.body.author = req.body.authors[0].author
     console.log('req.body.author', req.body.author)
 
