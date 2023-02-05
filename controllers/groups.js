@@ -11,7 +11,7 @@ const index = async (req, res) => {
       .populate('members')
       .populate('booksRead')
       .sort({ createdAt: 'desc' })
-      res.status(200).json(groups)
+    res.status(200).json(groups)
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
@@ -25,11 +25,11 @@ const createGroup = async (req, res) => {
     const profile = await Profile.findByIdAndUpdate(req.user.profile,
       { $push: { joinedGroups: group } },
       { new: true }
-      )
-      group.owner = profile
-      group.members.push(profile)
-      group.save()
-      res.status(201).json(group)
+    )
+    group.owner = profile
+    group.members.push(profile)
+    group.save()
+    res.status(201).json(group)
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
@@ -42,7 +42,7 @@ const show = async (req, res) => {
       .populate('owner')
       .populate('members')
       .populate('booksRead')
-      res.status(200).json(group)
+    res.status(200).json(group)
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
@@ -66,6 +66,22 @@ const joinGroup = async (req, res) => {
   }
 }
 
+const leaveGroup = async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.groupId)
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+    const profile = await Profile.findById(req.user.profile)
+    group.members.remove(profile)
+    await group.save()
+    res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 const update = async (req, res) => {
   try {
     const group = await Group.findByIdAndUpdate(
@@ -80,7 +96,7 @@ const update = async (req, res) => {
 }
 
 
-const deleteGroup = async(req, res) => {
+const deleteGroup = async (req, res) => {
   try {
     const group = await Group.findByIdAndDelete(req.params.groupId)
     const profile = await Profile.findById(req.user.profile)
@@ -96,21 +112,21 @@ const deleteGroup = async(req, res) => {
 function addPhoto(req, res) {
   const imageFile = req.files.photo.path
   Group.findById(req.params.id)
-  .then(group => {
-    console.log('beef')
-    cloudinary.uploader.upload(imageFile, {tags: `${group.name}`})
-    .then(image => {
-      group.imgUrl = image.url
-      group.save()
-      .then(group => {
-        res.status(201).json(group.imgUrl)
-      })
+    .then(group => {
+      console.log('beef')
+      cloudinary.uploader.upload(imageFile, { tags: `${group.name}` })
+        .then(image => {
+          group.imgUrl = image.url
+          group.save()
+            .then(group => {
+              res.status(201).json(group.imgUrl)
+            })
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(500).json(err)
+        })
     })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
-  })
 }
 
 export {
@@ -121,5 +137,5 @@ export {
   update,
   deleteGroup as delete,
   joinGroup,
-
+  leaveGroup,
 }
