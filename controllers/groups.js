@@ -49,6 +49,23 @@ const show = async (req, res) => {
   }
 }
 
+const joinGroup = async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.groupId)
+      .populate('owner')
+      .populate('members')
+      .populate('booksRead')
+    const profile = await Profile.findById(req.user.profile)
+    console.log(profile, 'profile')
+    group.members.push(profile)
+    await group.save()
+    res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 const update = async (req, res) => {
   try {
     const group = await Group.findByIdAndUpdate(
@@ -103,5 +120,6 @@ export {
   show,
   update,
   deleteGroup as delete,
+  joinGroup,
 
 }
