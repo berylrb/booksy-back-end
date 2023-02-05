@@ -36,23 +36,7 @@ async function show(req, res) {
   }
 }
 
-// async function createReview(req, res) {
-//   try {
-//     console.log(req.params, 'params')
-//     const book = await Book.findById(req.params.bookId)
-//     console.log(book, 'book')
-//     const profile = await Profile.findById(req.user.profile)
-//     req.body.reviewAuthor = profile.name
-//     const updatedBook = book.reviews?.push(req.body)
-//     // const newReview = book.reviews[book.reviews?.length - 1]
-//     await updatedBook.save()
-//     console.log(updatedBook, 'updated')
-//     res.status(201).json(updatedBook)
-//   } catch (error) {
-//     console.log(error)
-//     res.status(500).json(error)
-//   }
-// }
+
 
 function createReview(req, res) {
   Book.findById(req.params.bookId.trim())

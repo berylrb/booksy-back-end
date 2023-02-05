@@ -82,6 +82,21 @@ const leaveGroup = async (req, res) => {
   }
 }
 
+const addBook = async (req, res) => {
+  // /groups/:groupId/books/:bookId
+  try {
+    const group = await Group.findById(req.params.groupId)
+    const book = await Book.findById(req.params.bookId.trim())
+    console.log(group, book, 'group')
+    group.booksRead?.push(book)
+    await group.save()
+    res.status(200).json(group)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 const update = async (req, res) => {
   try {
     const group = await Group.findByIdAndUpdate(
@@ -138,4 +153,15 @@ export {
   deleteGroup as delete,
   joinGroup,
   leaveGroup,
+  addBook,
+
 }
+
+
+/*const myGroups = groups.filter(group => {
+  const members = group.members.filter(member => {
+    return member._id === profile
+  })
+  return members
+})
+*/
