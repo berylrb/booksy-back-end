@@ -36,6 +36,16 @@ async function show(req, res) {
   }
 }
 
+async function bookSearch(req, res) {
+  try {
+    const response = await axios.get(`https://openlibrary.org/search.json?q=${req.body.search}`)
+    res.json(response)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 
 
 function createReview(req, res) {
@@ -86,6 +96,7 @@ export {
   show,
   createReview,
   findReviewsByKey,
-  getBookRatings
+  getBookRatings,
+  bookSearch
 }
 
