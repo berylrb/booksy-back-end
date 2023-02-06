@@ -85,8 +85,9 @@ const leaveGroup = async (req, res) => {
 const addBook = async (req, res) => {
   // /groups/:groupId/books/:bookId
   try {
+    const { qKey } = req.params
     const group = await Group.findById(req.params.groupId)
-    const book = await Book.findById(req.params.bookId.trim())
+    const book = await Book.findOne({ qKey: qKey }).lean()
     console.log(group, book, 'group')
     group.booksRead?.push(book)
     await group.save()
