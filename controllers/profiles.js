@@ -63,9 +63,11 @@ const addBook = async (req, res) => {
   }
 }
 
+
 export {
   index,
   addPhoto,
   addBook,
-  show
+  show,
+
 }
