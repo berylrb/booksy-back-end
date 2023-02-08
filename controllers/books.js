@@ -38,7 +38,8 @@ async function show(req, res) {
 
 async function bookSearch(req, res) {
   try {
-    const response = await axios.get(`https://openlibrary.org/search.json?q=${req.body.search}`)
+    const response = await axios.get(`https://openlibrary.org/search.json?subject=${req.body.query}`)
+    console.log(req.body, 'req.body.query')
     res.json(response)
   } catch (error) {
     console.log(error)
