@@ -19,20 +19,41 @@ function bsIndex(req, res) {
 async function show(req, res) {
   try {
     const { qKey } = req.params
+    console.log(qKey, 'show qkey')
     console.log('qKey:', qKey)
 
     const response = await axios.get(`http://openlibrary.org/works/${qKey}.json`)
-    console.log('OL API Res:', response)
+    // console.log('OL API Res:', response)
 
     const bookData = await Book.findOne({ qKey: qKey }).lean()
-    console.log('Existing Book Doc:', bookData)
+    // console.log('Existing Book Doc:', bookData)
 
     const book = bookData ? { ...response.data, ...bookData } : response.data
-    console.log('Consolidated Book', book)
+    // console.log('Consolidated Book', book)
 
     res.json(book)
   } catch (err) {
     res.status(500).json(err)
+  }
+}
+
+const removeBook = async (req, res) => {
+  try {
+    console.log(req.params.qKey, 'qkey?')
+    const profile = await Profile.findById(req.user.profile)
+    .populate('savedBooks')
+    const book = await Book.findOne(req.params)
+    console.log(book, 'book here')
+    // .populate('collectedByPerson')
+    book.collectedByPerson?.remove(profile)
+    await book.save()
+    profile.savedBooks?.remove(book)
+    await profile.save()
+    console.log(profile, book, 'what is happening')
+    res.json(profile)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
   }
 }
 
@@ -98,6 +119,7 @@ export {
   createReview,
   findReviewsByKey,
   getBookRatings,
-  bookSearch
+  bookSearch,
+  removeBook
 }
 

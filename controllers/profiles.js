@@ -63,24 +63,11 @@ const addBook = async (req, res) => {
   }
 }
 
-const removeBook = async (req, res) => {
-  try {
-    const profile = await Profile.findById(req.params.id)
-    const book = await Book.create(req.body)
-    book.collectedByPerson?.remove(profile)
-    await book.save()
-    profile.savedBooks.remove(book)
-    await profile.save()
-  } catch (error) {
-    console.log(error)
-    res.status(500).json(error)
-  }
-}
 
 export {
   index,
   addPhoto,
   addBook,
   show,
-  removeBook
+
 }

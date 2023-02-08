@@ -75,6 +75,8 @@ const leaveGroup = async (req, res) => {
     const profile = await Profile.findById(req.user.profile)
     group.members.remove(profile)
     await group.save()
+    profile.joinedGroups.remove(group)
+    await profile.save()
     res.status(200).json(group)
   } catch (error) {
     console.log(error)

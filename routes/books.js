@@ -14,6 +14,7 @@ router.get('/:qKey', checkAuth, booksCtrl.show)
 router.get('/:qKey/ratings', checkAuth, booksCtrl.getBookRatings)
 router.post('/:bookId/reviews', checkAuth, booksCtrl.createReview)
 router.get('/:qKey/reviews', checkAuth, booksCtrl.findReviewsByKey)
+router.put('/:qKey/remove', checkAuth, booksCtrl.removeBook)
 
 
 
