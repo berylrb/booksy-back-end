@@ -37,6 +37,17 @@ async function show(req, res) {
   }
 }
 
+async function getSubject(req, res) {
+  try {
+    const { subject } = req.params
+    const subjBooks = await axios.get(`https://openlibrary.org/subjects/${subject}.json`)
+    res.json(subjBooks)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const removeBook = async (req, res) => {
   try {
     console.log(req.params.qKey, 'qkey?')
@@ -120,6 +131,7 @@ export {
   findReviewsByKey,
   getBookRatings,
   bookSearch,
-  removeBook
+  removeBook,
+  getSubject
 }
 
