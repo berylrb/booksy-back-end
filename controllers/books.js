@@ -23,13 +23,10 @@ async function show(req, res) {
     console.log('qKey:', qKey)
 
     const response = await axios.get(`http://openlibrary.org/works/${qKey}.json`)
-    // console.log('OL API Res:', response)
 
     const bookData = await Book.findOne({ qKey: qKey }).lean()
-    // console.log('Existing Book Doc:', bookData)
 
     const book = bookData ? { ...response.data, ...bookData } : response.data
-    // console.log('Consolidated Book', book)
 
     res.json(book)
   } catch (err) {
