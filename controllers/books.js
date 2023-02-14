@@ -40,8 +40,11 @@ async function show(req, res) {
 async function getSubject(req, res) {
   try {
     const { subject } = req.params
+    console.log(subject, 'subj')
     const subjBooks = await axios.get(`https://openlibrary.org/subjects/${subject}.json`)
-    res.json(subjBooks)
+    let subjBooks2 = subjBooks?.data.works
+    console.log(subjBooks2.slice(0, 5), 'LOOK HERE')
+    res.json(subjBooks2.slice(0, 50))
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
